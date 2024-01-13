@@ -1,5 +1,5 @@
-import Regex.Lemmas
-import Regex.NFA.Basic
+import RegexCorrectness.Lemmas
+import RegexCorrectness.NFA.Basic
 
 namespace NFA
 

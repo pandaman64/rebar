@@ -1,6 +1,6 @@
 import Regex.NFA.VM.Basic
-import Regex.NFA.Transition
-import Regex.NFA.Correctness
+import RegexCorrectness.NFA.Transition
+import RegexCorrectness.NFA.Correctness
 
 theorem Array.isEmpty_iff {α} (a : Array α) : a.isEmpty ↔ a = #[] := by
   have : a.isEmpty ↔ a.data = [] := by
@@ -144,13 +144,13 @@ theorem εClosureTR_spec {i : Fin nfa.nodes.size} {inBounds : nfa.inBounds} :
       | false =>
         have : (visited.set n).count_unset < visited.count_unset :=
           visited.lt_count_unset n.isLt (by simp [hvis])
-        have inBounds' := (inBounds n).right
+        have inBounds' := inBounds n
         simp [hvis]
         split
         next next eqEps =>
           have h : next < nfa.nodes.size := by
             rw [hn] at inBounds'
-            simp [Node.εStep, eqEps] at inBounds'
+            simp [eqEps, Node.inBounds] at inBounds'
             exact inBounds'
 
           set stack'' := stack'.push ⟨next, h⟩ with hs''
@@ -198,14 +198,10 @@ theorem εClosureTR_spec {i : Fin nfa.nodes.size} {inBounds : nfa.inBounds} :
           simp at ih
           exact ih
         next next₁ next₂ eqSplit =>
-          have h₁ : next₁ < nfa.nodes.size := by
-            rw [hn] at inBounds'
-            simp [Node.εStep, eqSplit] at inBounds'
-            apply Set.mem_of_mem_of_subset (by simp) inBounds'
-          have h₂ : next₂ < nfa.nodes.size := by
-            rw [hn] at inBounds'
-            simp [Node.εStep, eqSplit] at inBounds'
-            apply Set.mem_of_mem_of_subset (by simp) inBounds'
+          rw [hn] at inBounds'
+          simp [eqSplit, Node.inBounds] at inBounds'
+          have h₁ : next₁ < nfa.nodes.size := inBounds'.left
+          have h₂ : next₂ < nfa.nodes.size := inBounds'.right
 
           set stack'' := (stack'.push ⟨next₁, h₁⟩).push ⟨next₂, h₂⟩ with hs''
           have inv' : inv (visited.set n) stack'' := by
@@ -345,9 +341,7 @@ theorem εClosureTR_spec {i : Fin nfa.nodes.size} {inBounds : nfa.inBounds} :
       simp at mem
       let ⟨j', h₄, h₅⟩ := mem
       simp [h₅] at step
-      have klt : k < nfa.nodes.size :=
-        show k ∈ { k | k < nfa.nodes.size} from
-        Set.mem_of_mem_of_subset step (inBounds j').right
+      have klt : k < nfa.nodes.size := lt_of_inBounds_of_εStep inBounds step
       have := h₂ j' ⟨k, klt⟩ h₄ step
       simp
       exact ⟨⟨k, klt⟩, this, rfl⟩
@@ -428,9 +422,10 @@ theorem charStepTR_spec {nfa : NFA} {inBounds : nfa.inBounds}
         next c' next hn =>
           split
           case inl eq =>
-            have : next < nfa.nodes.size :=
-              show next ∈ { j | j < nfa.nodes.size } from
-              Set.mem_of_mem_of_subset (by simp [hn, Node.charStep]) ((inBounds ⟨i, hlt⟩).left c')
+            have : next < nfa.nodes.size := by
+              have := inBounds ⟨i, hlt⟩
+              simp [Node.inBounds, hn] at this
+              exact this
             set εCls := εClosureTR nfa inBounds .empty #[⟨next, this⟩]
             set accum' := accum.merge εCls
             have inv' : inv accum' (i + 1) := by

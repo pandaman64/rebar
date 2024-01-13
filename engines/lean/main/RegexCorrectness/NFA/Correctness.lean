@@ -1,4 +1,4 @@
-import Regex.NFA.Transition
+import RegexCorrectness.NFA.Transition
 
 namespace NFA
 

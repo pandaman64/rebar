@@ -1,6 +1,30 @@
-use std::{env::current_dir, fs, path::PathBuf, process::Command};
+use std::{
+    env::current_dir,
+    fs,
+    path::{Path, PathBuf},
+    process::Command,
+};
 
 // See https://github.com/LemonHX/lean4-rs/blob/d2064357140a31fab564058d83b95b5bb04940be/lean4-sys/build.rs
+
+fn compile_lean_static(lean_regix_dir: &Path, name: &str) {
+    let build_output = Command::new("lake")
+        .args(["build", &format!("{}:static", name)])
+        .current_dir(&lean_regix_dir)
+        .output()
+        .unwrap_or_else(|e| {
+            panic!("Failed to execute lake build {}:static, {:?}", name, e)
+        });
+    if !build_output.status.success() {
+        panic!(
+            "lake build {}:staticlib failed with status {}\n{}\n{}",
+            name,
+            build_output.status,
+            String::from_utf8_lossy(&build_output.stdout),
+            String::from_utf8_lossy(&build_output.stderr),
+        );
+    }
+}
 
 fn main() {
     println!("cargo:rerun-if-changed=main");
@@ -25,28 +49,42 @@ fn main() {
     // build static lib
     let lean_regix_dir =
         current_dir().expect("Failed to get current dir").join("main");
-    let build_output = Command::new("lake")
-        .args(["build", "Regex:static"])
-        .current_dir(&lean_regix_dir)
-        .output()
-        .expect("Failed to execute lake build Regex:static");
-    if !build_output.status.success() {
-        panic!(
-            "lake build Regex:staticlib failed with status {}\n{}\n{}",
-            build_output.status,
-            String::from_utf8_lossy(&build_output.stdout),
-            String::from_utf8_lossy(&build_output.stderr),
-        );
-    }
+    compile_lean_static(&lean_regix_dir, "Regex");
+    compile_lean_static(&lean_regix_dir, "Std");
+    compile_lean_static(&lean_regix_dir, "Parser");
+    compile_lean_static(&lean_regix_dir, "UnicodeBasic");
+
+    let lib_out_dir = out_dir.join("leanlib");
+    fs::create_dir_all(&lib_out_dir).expect("Failed to create leanlib dir");
     fs::copy(
         lean_regix_dir.join(".lake/build/lib/libRegex.a"),
-        out_dir.join("libRegex.a"),
+        lib_out_dir.join("libRegex.a"),
     )
     .expect("Failed to copy libRegex.a");
+    fs::copy(
+        lean_regix_dir.join(".lake/packages/std/.lake/build/lib/libStd.a"),
+        lib_out_dir.join("libStd.a"),
+    )
+    .expect("Failed to copy libStd.a");
+    fs::copy(
+        lean_regix_dir
+            .join(".lake/packages/Parser/.lake/build/lib/libParser.a"),
+        lib_out_dir.join("libParser.a"),
+    )
+    .expect("Failed to copy libParser.a");
+    fs::copy(
+        lean_regix_dir.join(
+            ".lake/packages/UnicodeBasic/.lake/build/lib/libUnicodeBasic.a",
+        ),
+        lib_out_dir.join("libUnicodeBasic.a"),
+    )
+    .expect("Failed to copy libUnicodeBasic.a");
 
-    // is it a good idea to add OUT_DIR to the library search path?
-    println!("cargo:rustc-link-search=native={}", out_dir.display());
+    println!("cargo:rustc-link-search=native={}", lib_out_dir.display());
     println!("cargo:rustc-link-lib=static=Regex");
+    println!("cargo:rustc-link-lib=static=Parser");
+    println!("cargo:rustc-link-lib=static=UnicodeBasic");
+    println!("cargo:rustc-link-lib=static=Std");
 
     // link to Lean shared library (assumes Linux)
     let lean_lib_dir = lean_prefix.join("lib/lean");

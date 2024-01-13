@@ -11,6 +11,27 @@ pub(crate) fn lean_is_scalar(o: *mut lean_object) -> bool {
 }
 
 #[inline]
+pub(crate) unsafe fn lean_is_st(o: *mut lean_object) -> bool {
+    (*o).m_rc > 0
+}
+
+#[inline]
+pub(crate) unsafe fn lean_inc_ref(o: *mut lean_object) {
+    if lean_is_st(o) {
+        (*o).m_rc += 1;
+    } else if (*o).m_rc != 0 {
+        lean_inc_ref_cold(o);
+    }
+}
+
+#[inline]
+pub(crate) unsafe fn lean_inc(o: *mut lean_object) {
+    if !lean_is_scalar(o) {
+        lean_inc_ref(o);
+    }
+}
+
+#[inline]
 pub(crate) unsafe fn lean_dec_ref(o: *mut lean_object) {
     if (*o).m_rc > 1 {
         (*o).m_rc -= 1;
