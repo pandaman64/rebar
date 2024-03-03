@@ -114,6 +114,8 @@ engines = [
   'icu',
   'java/hotspot',
   'javascript/v8',
+  # Support for non-capturing groups (?:) is required.
+  # 'lean',
   'perl',
   'python/re',
   'python/regex',

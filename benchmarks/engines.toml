@@ -496,6 +496,23 @@
     bin = "rm"
     args = ["-f", "main-ldc"]
 
+# Lean implementation similar to rust/regex-lite
+[[engine]]
+  name = "lean"
+  cwd = "../engines/lean"
+  [engine.version]
+    bin = "./target/release/main"
+    args = ["--version"]
+  [engine.run]
+    bin = "./target/release/main"
+  [[engine.build]]
+    bin = "cargo"
+    args = ["build", "--release"]
+  [[engine.clean]]
+    bin = "cargo"
+    args = ["clean"]
+
+
 # RUST REGEX CRATE INTERNAL REGEX ENGINES
 #
 # These reflect different regex engines used by 'rust/regex' internally, and
