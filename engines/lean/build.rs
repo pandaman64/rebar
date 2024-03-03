@@ -5,12 +5,14 @@ use std::{
     process::Command,
 };
 
+const LEAN_REGEX_DIR: &str = "e59842e";
+
 // See https://github.com/LemonHX/lean4-rs/blob/d2064357140a31fab564058d83b95b5bb04940be/lean4-sys/build.rs
 
 fn compile_lean_static(lean_regix_dir: &Path, name: &str) {
     let build_output = Command::new("lake")
         .args(["build", &format!("{}:static", name)])
-        .current_dir(&lean_regix_dir)
+        .current_dir(lean_regix_dir)
         .output()
         .unwrap_or_else(|e| {
             panic!("Failed to execute lake build {}:static, {:?}", name, e)
@@ -27,12 +29,17 @@ fn compile_lean_static(lean_regix_dir: &Path, name: &str) {
 }
 
 fn main() {
-    println!("cargo:rerun-if-changed=main");
+    println!("cargo:rerun-if-changed={LEAN_REGEX_DIR}");
+    println!("cargo:rustc-env=LEAN_REGEX_VERSION={LEAN_REGEX_DIR}");
+    let lean_regix_dir =
+        current_dir().expect("Failed to get current dir").join(LEAN_REGEX_DIR);
 
     let out_dir = PathBuf::from(std::env::var_os("OUT_DIR").unwrap());
 
     let lean_output = Command::new("lean")
         .arg("--print-prefix")
+        // Run in lean_regex_dir to choose the Lean executable from `lean-toolchain`
+        .current_dir(&lean_regix_dir)
         .output()
         .expect("Failed to execute lean --print-prefix");
     if !lean_output.status.success() {
@@ -47,8 +54,6 @@ fn main() {
     let lean_prefix = PathBuf::from(lean_prefix.trim());
 
     // build static lib
-    let lean_regix_dir =
-        current_dir().expect("Failed to get current dir").join("main");
     compile_lean_static(&lean_regix_dir, "Regex");
     compile_lean_static(&lean_regix_dir, "Std");
     compile_lean_static(&lean_regix_dir, "Parser");

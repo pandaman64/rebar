@@ -58,6 +58,36 @@ pub(crate) fn lean_unbox(o: *mut lean_object) -> usize {
 }
 
 #[inline]
+pub(crate) unsafe fn lean_ptr_tag(o: *mut lean_object) -> usize {
+    (*o).m_tag() as usize
+}
+
+#[inline]
+pub(crate) unsafe fn lean_obj_tag(o: *mut lean_object) -> usize {
+    if lean_is_scalar(o) {
+        lean_unbox(o)
+    } else {
+        lean_ptr_tag(o)
+    }
+}
+
+#[inline]
+pub(crate) unsafe fn lean_ctor_num_objs(o: *mut lean_object) -> usize {
+    debug_assert!(lean_ptr_tag(o) <= LeanMaxCtorTag as usize);
+    (*o).m_other() as usize
+}
+
+#[inline]
+pub(crate) unsafe fn lean_ctor_get(
+    o: *mut lean_object,
+    i: usize,
+) -> *mut lean_object {
+    debug_assert!(i < lean_ctor_num_objs(o));
+    let o = o.cast::<lean_ctor_object>();
+    *(*o).m_objs.as_ptr().add(i)
+}
+
+#[inline]
 pub(crate) fn lean_io_mk_world() -> *mut lean_object {
     lean_box(0)
 }
