@@ -509,6 +509,9 @@
     args = ["--version"]
   [[engine.build]]
     bin = "lake"
+    args = ["update"]
+  [[engine.build]]
+    bin = "lake"
     args = ["build", "lean_runner"]
   [[engine.clean]]
     bin = "lake"
