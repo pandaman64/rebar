@@ -2,6 +2,8 @@ import Regex
 
 set_option autoImplicit false
 
+def Regex.backtracking (self : Regex) : Regex := { self with useBacktracker := true }
+
 structure Klv where
   key : String
   -- not supporting arbitrary bytes
@@ -207,11 +209,18 @@ def main (args : List String) : IO Unit := do
     IO.println "v4.20.0"
     return
 
+  let useBacktracker := args.contains "backtracker"
+
   let stdin ← IO.getStdin
   let input ← stdin.readBinToEnd
   let config ← match parseConfig input with
     | Except.ok c => pure c
     | Except.error e => throw (IO.userError e)
+
+  let config := if useBacktracker then
+    { config with regex := config.regex.backtracking }
+  else
+    config
 
   let samples ← match config.model with
   | "compile" => modelCompile config
