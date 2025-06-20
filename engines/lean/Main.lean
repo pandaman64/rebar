@@ -160,7 +160,7 @@ def modelCompile (config : Config) : IO (Array Sample) :=
 
 @[noinline]
 def runFindAll (config : Config) : IO (Array (String.Pos × String.Pos)) :=
-  pure (config.regex.findAll config.haystack)
+  pure $ (config.regex.findAll config.haystack).map fun s => (s.startPos, s.stopPos)
 
 def modelCount (config : Config) : IO (Array Sample) := do
   runBenchmarks config (runFindAll config) (·.size)
@@ -203,8 +203,8 @@ def modelGrepCaptures (config : Config) : IO (Array Sample) :=
   runBenchmarks config (runGrepCaptures config) id
 
 def main (args : List String) : IO Unit := do
-  if args.get? 0 == "--version" then
-    IO.println "110b998a"
+  if args.contains "--version" then
+    IO.println "v4.20.0"
     return
 
   let stdin ← IO.getStdin

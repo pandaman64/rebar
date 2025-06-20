@@ -9,5 +9,5 @@ supportInterpreter = true
 [[require]]
 name = "Regex"
 git = "https://github.com/pandaman64/lean-regex"
-rev = "110b998a49e4f2730d6a3bd1d3c45aace7119962"
+rev = "v4.20.0"
 subDir = "regex"
