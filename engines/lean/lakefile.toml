@@ -1,0 +1,13 @@
+name = "lean_runner"
+defaultTargets = ["lean_runner"]
+
+[[lean_exe]]
+name = "lean_runner"
+root = "Main"
+supportInterpreter = true
+
+[[require]]
+name = "Regex"
+git = "https://github.com/pandaman64/lean-regex"
+rev = "110b998a49e4f2730d6a3bd1d3c45aace7119962"
+subDir = "regex"
