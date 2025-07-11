@@ -4,7 +4,7 @@ defaultTargets = ["lean_runner"]
 [[lean_exe]]
 name = "lean_runner"
 root = "Main"
-supportInterpreter = true
+buildType = "relWithDebInfo"
 
 [[require]]
 name = "Regex"
