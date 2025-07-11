@@ -37,15 +37,6 @@ def parseKlv (data : ByteArray) : Array Klv := Id.run do
     | none => break
   return result
 
-partial def IO.FS.Stream.readBinToEnd (stream : IO.FS.Stream) : IO ByteArray := do
-  let rec loop (acc : ByteArray) : IO ByteArray := do
-    let buf ← stream.read 4096
-    if buf.isEmpty then
-      return acc
-    else
-      loop (acc ++ buf)
-  loop ByteArray.empty
-
 def Option.okOr {α ε} (self : Option α) (err : Unit → ε) : Except ε α :=
   match self with
   | some a => Except.ok a
@@ -206,7 +197,7 @@ def modelGrepCaptures (config : Config) : IO (Array Sample) :=
 
 def main (args : List String) : IO Unit := do
   if args.contains "--version" then
-    IO.println "v4.21.0"
+    IO.println "v4.22.0-rc3"
     return
 
   let useBacktracker := args.contains "backtracker"
