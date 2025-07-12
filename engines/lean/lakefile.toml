@@ -8,6 +8,6 @@ buildType = "relWithDebInfo"
 
 [[require]]
 name = "Regex"
-git = "https://github.com/pandaman64/lean-regex"
-rev = "5d40ebb004bdf2caf720bccbdce8e65c1a0eff25"
+git = "https://github.com/muttener/lean-regex"
+rev = "f9575906196ca33f40f1bc1e713460ba5e94422c"
 subDir = "regex"

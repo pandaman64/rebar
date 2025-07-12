@@ -1,0 +1,19 @@
+name,model,rebar_version,engine,engine_version,err,haystack_len,iters,total,median,mad,mean,stddev,min,max
+curated/01-literal/sherlock-en,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,899232,25,4.71s,102.06ms,600.93us,122.98ms,69.13ms,100.63ms,370.07ms
+curated/01-literal/sherlock-ru,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,1570556,52,4.61s,56.75ms,348.25us,57.78ms,2.83ms,56.22ms,70.68ms
+curated/01-literal/sherlock-zh,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,813478,90,4.61s,30.35ms,462.11us,33.52ms,10.44ms,29.62ms,92.40ms
+curated/02-literal-alternate/sherlock-en,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,899232,7,5.11s,448.09ms,3.10ms,460.96ms,24.48ms,444.99ms,518.90ms
+curated/02-literal-alternate/sherlock-ru,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,1570556,7,5.21s,486.59ms,24.38ms,490.67ms,28.82ms,462.04ms,537.58ms
+curated/02-literal-alternate/sherlock-zh,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,813478,16,4.81s,173.21ms,3.87ms,195.60ms,59.82ms,167.71ms,413.15ms
+curated/03-date/ascii,count-spans,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),timeout: exceeded 10s,,0,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns
+curated/03-date/unicode,count-spans,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),timeout: exceeded 10s,,0,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns
+curated/06-cloud-flare-redos/simplified-short,count-spans,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,102,54852,4.61s,53.67us,802.00ns,54.63us,13.83us,48.31us,730.75us
+curated/06-cloud-flare-redos/simplified-long,count-spans,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,10001,579,4.56s,5.07ms,56.01us,5.18ms,830.75us,4.77ms,16.38ms
+curated/07-unicode-character-data/parse-line,grep-captures,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,1913704,3,5.16s,1.00s,7.09ms,1.08s,121.06ms,0.99s,1.25s
+curated/07-unicode-character-data/compile,compile,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,,62536,4.56s,17.89us,191.00ns,18.34us,6.18us,16.56us,210.01us
+curated/09-aws-keys/full,grep-captures,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),timeout: exceeded 10s,,0,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns,0.00ns
+curated/09-aws-keys/quick,grep,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,32514634,2,5.86s,1.92s,30.70ms,1.92s,30.70ms,1.89s,1.95s
+curated/09-aws-keys/compile-quick,compile,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,,126177,4.56s,7.81us,169.00ns,8.64us,7.26us,6.99us,284.76us
+curated/14-quadratic/1x,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,100,3048,4.56s,0.97ms,12.18us,0.98ms,177.15us,868.11us,7.56ms
+curated/14-quadratic/2x,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,200,803,4.56s,3.68ms,30.59us,3.74ms,613.34us,3.57ms,16.12ms
+curated/14-quadratic/10x,count,0.1.0 (rev 19aa8e8e3b),lean,v4.22.0-rc3 (2a3fa4d),,1000,34,4.71s,89.72ms,1.02ms,90.04ms,1.70ms,87.16ms,94.98ms
