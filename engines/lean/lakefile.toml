@@ -9,5 +9,5 @@ buildType = "relWithDebInfo"
 [[require]]
 name = "Regex"
 git = "https://github.com/muttener/lean-regex"
-rev = "f9575906196ca33f40f1bc1e713460ba5e94422c"
+rev = "e33581765dd0b6560d3737fed356d317a7fa68b1"
 subDir = "regex"
