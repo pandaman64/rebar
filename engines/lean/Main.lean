@@ -197,7 +197,7 @@ def modelGrepCaptures (config : Config) : IO (Array Sample) :=
 
 def main (args : List String) : IO Unit := do
   if args.contains "--version" then
-    IO.println "v4.22.0-rc3 (e335817)"
+    IO.println "v4.22.0-rc3 (d583eea)"
     return
 
   let useBacktracker := args.contains "backtracker"
