@@ -9,5 +9,5 @@ buildType = "relWithDebInfo"
 [[require]]
 name = "Regex"
 git = "https://github.com/pandaman64/lean-regex"
-rev = "d583eea1049d1838136ce55aa86658da986094b8"
+rev = "a3199cdd0a46996bb1897e7d83022cd0f54804eb"
 subDir = "regex"
