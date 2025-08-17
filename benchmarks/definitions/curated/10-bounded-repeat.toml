@@ -53,8 +53,8 @@ engines = [
   'icu',
   'java/hotspot',
   'javascript/v8',
-  # "count mismatch, expected 1833, got 52"
-  # 'lean',
+  'lean',
+  'lean/backtracker',
   'pcre2',
   'pcre2/jit',
   'perl',

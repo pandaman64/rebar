@@ -78,8 +78,8 @@ engines = [
   'icu',
   'java/hotspot',
   'javascript/v8',
-  # Failed to parse regex
-  # 'lean',
+  'lean',
+  'lean/backtracker',
   'pcre2',
   'pcre2/jit',
   'perl',

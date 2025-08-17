@@ -114,6 +114,9 @@ engines = [
   'icu',
   'java/hotspot',
   'javascript/v8',
+  # Timeout
+  # 'lean',
+  # 'lean/backtracker',
   'perl',
   'python/re',
   'python/regex',
