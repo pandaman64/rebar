@@ -132,10 +132,10 @@ def runBenchmarks {α : Type} (config : Config) (action : IO α) (count : α →
 
   return samples
 
-def Regex.CapturedGroups.countGroups (groups : Regex.CapturedGroups) : Nat :=
+def Regex.CapturedGroups.countGroups {haystack} (groups : Regex.CapturedGroups haystack) : Nat :=
   go groups 0 0
 where
-  go (groups : Regex.CapturedGroups) (i : Nat) (count : Nat) : Nat :=
+  go (groups : Regex.CapturedGroups haystack) (i : Nat) (count : Nat) : Nat :=
     if i ≥ groups.buffer.size / 2 then
       count
     else
@@ -152,8 +152,8 @@ def modelCompile (config : Config) : IO (Array Sample) :=
   runBenchmarks config (runCompile config) (fun r => (r.findAll config.haystack).size)
 
 @[noinline]
-def runFindAll (config : Config) : IO (Array (String.Pos × String.Pos)) :=
-  pure $ (config.regex.findAll config.haystack).map fun s => (s.startPos, s.stopPos)
+def runFindAll (config : Config) : IO (Array (String.Pos.Raw × String.Pos.Raw)) :=
+  pure $ (config.regex.findAll config.haystack).map fun s => (s.startInclusive.offset, s.endExclusive.offset)
 
 def modelCount (config : Config) : IO (Array Sample) := do
   runBenchmarks config (runFindAll config) (·.size)
@@ -162,7 +162,7 @@ def modelCountSpans (config : Config) : IO (Array Sample) :=
   runBenchmarks config (runFindAll config) (·.foldl (init := 0) (fun acc (s, e) => acc + (e.byteIdx - s.byteIdx)))
 
 @[noinline]
-def runCaptureAll (config : Config) : IO (Array Regex.CapturedGroups) :=
+def runCaptureAll (config : Config) : IO (Array (Regex.CapturedGroups config.haystack)) :=
   pure (config.regex.captureAll config.haystack)
 
 def modelCountCaptures (config : Config) : IO (Array Sample) :=
@@ -197,7 +197,7 @@ def modelGrepCaptures (config : Config) : IO (Array Sample) :=
 
 def main (args : List String) : IO Unit := do
   if args.contains "--version" then
-    IO.println "v4.25.1 (e1600a18)"
+    IO.println "v4.26.0-rc2 (e2e33d6a)"
     return
 
   let useBacktracker := args.contains "backtracker"
