@@ -159,7 +159,7 @@ def modelCount (config : Config) : IO (Array Sample) := do
   runBenchmarks config (runFindAll config) (·.size)
 
 def modelCountSpans (config : Config) : IO (Array Sample) :=
-  runBenchmarks config (runFindAll config) (·.foldl (init := 0) (fun acc (s, e) => acc + (e - s).byteIdx))
+  runBenchmarks config (runFindAll config) (·.foldl (init := 0) (fun acc (s, e) => acc + (e.byteIdx - s.byteIdx)))
 
 @[noinline]
 def runCaptureAll (config : Config) : IO (Array Regex.CapturedGroups) :=
@@ -197,7 +197,7 @@ def modelGrepCaptures (config : Config) : IO (Array Sample) :=
 
 def main (args : List String) : IO Unit := do
   if args.contains "--version" then
-    IO.println "v4.24.0-rc1 (53fe74eb)"
+    IO.println "v4.25.1 (e1600a18)"
     return
 
   let useBacktracker := args.contains "backtracker"
